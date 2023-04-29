@@ -26,7 +26,6 @@ The repository is created for better understanding of assembly language programm
 - For running tasm you need setup it in your computer in to C drive.
 ## Acknowledgements
 
- <!-- - [class notes](https://awesomeopensource.com/project/elangosundar/awesome-README-templates) -->
  - [chatgpt](https://chat.openai.com/)
 
 
