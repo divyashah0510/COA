@@ -1,68 +1,38 @@
-; Set code model to small and define data segment
 .model small
 .data
-a db 92H ; Define byte variable 'a' with initial value 92H
-
-; Start of code segment
+a db 13H 
 .code
-    ; Initialize data segment
-    mov ax, @data
-    mov ds, ax
-
-    ; Load value of 'a' into AL and mask lower nibble with 0F0h
-    mov al, a
-    and al, 0F0h
-    ; Rotate the masked nibble 4 times to the right to make it 09h
-    rcr al, 4
-    ; Store the result in BH
-    mov bh, al
-    ; Call the 'disp' procedure to display the upper nibble
-    call disp
-    ; Load value of 'a' into AL and mask upper nibble with 0Fh
-    mov al, a
-    and al, 0Fh
-    ; Store the result in BH
-    mov bh, al
-    ; Call the 'disp' procedure to display the lower nibble
-    call disp
-
-    ; Exit program
-    mov ah, 4ch
-    int 21h 
-
-; Define 'disp' procedure
+mov ax, @data ; Initialize the data section
+mov ds, ax
+mov al, a ; Load number1 into al
+and al, 0f0h ; mask the lower nibble
+mov cl, 04h
+rcr al, cl ; rotate it 4 times to right to make it 09h
+mov bh, al ; store the result in bh
+call disp ; displaying the upper nibble
+mov al, a ; Load number1 into al
+and al, 0fh ; mask the upper nibble
+mov bh, al ; store the result into bh
+call disp ; displaying the lower nibble
+mov ah, 4cH ; Terminate the Program
+int 21H 
 disp proc near
-    ; Initialize digit count to 2 and bit shift count to 4
-    mov ch, 02h
-    mov cl, 04h
-l2: ; Rotate the value of BH to the right by 4 bits
-    rol bh, cl
-    ; Load the value to be displayed into DL
-    mov dl, bh
-    ; Mask DL to get only the LSB
-    and dl, 0Fh
-    ; Check if the digit is 0-9 or A-F
-    cmp dl, 09h
-    jbe l4
-    ; If digit is a letter, add 7 to it to get ASCII code
-    add dl, 07h
-l4: ; Add 30h to get ASCII code of digit
-    add dl, 30h
-    ; Display the character using INT 21h, Function 02h
-    mov ah, 02h
-    int 21h
-    ; Decrement digit count and loop until all digits have been displayed
-    dec ch
-    jnz l2
-
-    ; Display a space character
-    mov ah, 02h
-    mov dl, ' '
-    int 21h
-    
-    ; Return from procedure
-    ret
-disp endp
-
-; End of code segment
-end
+mov ch, 02h ; Count the no of digits to be displayed
+mov cl, 04h ; Count to roll by 4 bits
+l2: rol bh, cl ; roll bl so that msb comes to lsb
+mov dl, bh ; load dl with data to be displayed
+and dl, 0fH ; get only lsb
+cmp dl, 09 ; check if the digit is from 0-9 or letter from A-F
+jbe l4
+add dl, 07 ; if letter then add 37H  orelse only add 30H
+l4: add dl, 30H
+mov ah, 02 ; Function 2 under INT 21H (Display character)
+int 21H
+dec ch ; Decrement Count
+jnz l2
+mov ah, 02h
+mov dl, ' '
+int 21h
+endp
+ret
+en
