@@ -32,3 +32,6 @@
 - After creating the above diagram you need to write assembly code for 7 segment running:
 
    [@7seg.asm](https://github.com/divyashah0510/COA/blob/main/Proteus_Software/7seg.asm)
+   
+- Save the code and then finally run the device which you have successfully created :)
+
